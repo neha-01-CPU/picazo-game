@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#3b82f6">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Picazo – Sketch it. Guess it. Win it.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 1: HOME LOBBY
+══════════════════════════════════════ -->
+<div id="screen-lobby" class="screen active">
+  <label class="theme-toggle-label" style="position:absolute;top:24px;right:24px;z-index:100;">
+    <input type="checkbox" class="theme-checkbox">
+    <div class="glass-slider">
+      <span class="icon sun">☀️</span>
+      <span class="icon moon">🌙</span>
+    </div>
+  </label>
+
+  <div class="lobby-card glass-strong">
+    <div class="lobby-header">
+      <div class="logo-wrap">
+        <span class="logo-icon">🎨</span>
+        <h1 class="logo-text">Picazo</h1>
+      </div>
+      <p class="lobby-tagline">Sketch it. Guess it. Win it.</p>
+    </div>
+
+    <div class="section-block">
+      <label class="section-label">Your Name</label>
+      <input id="inp-name" class="name-input" type="text" placeholder="Enter your name…" maxlength="16" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="section-block">
+      <label class="section-label">Choose Avatar</label>
+      <div class="avatar-picker">
+        <button id="btn-av-prev" class="av-arrow" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div id="av-frame" class="av-frame">
+          <img id="av-img" src="" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+        </div>
+        <button id="btn-av-next" class="av-arrow" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+      <div id="av-dots" class="av-dots"></div>
+    </div>
+
+    <div class="section-block btn-stack">
+      <button id="btn-play" class="primary-btn glow-btn">
+        <span class="btn-icon">🎮</span> PLAY NOW
+      </button>
+      <button id="btn-private" class="secondary-btn">
+        <span class="btn-icon">🔒</span> Create Private Room
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 2: PRIVATE ROOM LOBBY
+     (3-column: Players | Settings | Invite)
+══════════════════════════════════════ -->
+<div id="screen-priv-lobby" class="screen">
+  <label class="theme-toggle-label" style="position:absolute;top:16px;right:16px;z-index:100;">
+    <input type="checkbox" class="theme-checkbox">
+    <div class="glass-slider">
+      <span class="icon sun">☀️</span>
+      <span class="icon moon">🌙</span>
+    </div>
+  </label>
+
+  <div class="priv-lobby-wrap">
+
+    <!-- Header -->
+    <div class="priv-lobby-header glass-strong">
+      <div class="priv-lobby-title-row">
+        <span class="logo-icon" style="font-size:1.6rem;">🎨</span>
+        <h2 class="priv-lobby-title">Private Room</h2>
+        <div id="priv-player-count" class="priv-player-count">1/8 players</div>
+      </div>
+    </div>
+
+    <!-- 3-Column Grid -->
+    <div class="priv-lobby-grid">
+
+      <!-- LEFT: Players Panel -->
+      <div class="priv-panel glass-strong">
+        <h3 class="priv-panel-title">👥 Players</h3>
+        <ul id="priv-player-list" class="priv-player-list"></ul>
+      </div>
+
+      <!-- CENTER: Game Settings -->
+      <div class="priv-panel glass-strong priv-settings-panel">
+        <h3 class="priv-panel-title">⚙️ Game Settings</h3>
+        <div id="priv-settings-lock-notice" class="priv-lock-notice hidden">
+          <span>🔒</span> Only the host can change settings
+        </div>
+
+        <div class="priv-setting-group">
+          <label class="priv-setting-label">Max Players</label>
+          <select id="ls-max-players" class="setting-sel wide priv-setting-sel">
+            <option value="4">4 Players</option>
+            <option value="6">6 Players</option>
+            <option value="8" selected>8 Players</option>
+            <option value="10">10 Players</option>
+            <option value="12">12 Players</option>
+          </select>
+        </div>
+
+        <div class="priv-setting-group">
+          <label class="priv-setting-label">Rounds</label>
+          <select id="ls-rounds" class="setting-sel wide priv-setting-sel">
+            <option value="1">1 Round</option>
+            <option value="2">2 Rounds</option>
+            <option value="3">3 Rounds</option>
+            <option value="4">4 Rounds</option>
+            <option value="5" selected>5 Rounds</option>
+            <option value="6">6 Rounds</option>
+          </select>
+        </div>
+
+        <div class="priv-setting-group">
+          <label class="priv-setting-label">Draw Time</label>
+          <select id="ls-draw-time" class="setting-sel wide priv-setting-sel">
+            <option value="60">60 seconds (Fast!)</option>
+            <option value="90" selected>90 seconds</option>
+            <option value="120">120 seconds</option>
+            <option value="150">150 seconds</option>
+            <option value="180">180 seconds (Long)</option>
+          </select>
+        </div>
+
+        <div class="priv-setting-group">
+          <label class="priv-setting-label">Hint Intensity</label>
+          <select id="ls-hints" class="setting-sel wide priv-setting-sel">
+            <option value="none">None (Hardcore)</option>
+            <option value="slow">Slow (1 Hint)</option>
+            <option value="medium" selected>Medium (2 Hints)</option>
+            <option value="fast">Fast (3 Hints)</option>
+          </select>
+        </div>
+
+        <div class="priv-setting-group">
+          <label class="priv-setting-label">Custom Words <span style="font-weight:400;text-transform:none;font-size:0.7rem;">(comma-separated)</span></label>
+          <textarea id="ls-custom-words" class="custom-words-input priv-setting-sel" placeholder="e.g. banana, lighthouse, spaceship…" rows="3"></textarea>
+        </div>
+
+        <button id="btn-apply-settings" class="priv-apply-btn hidden">
+          ✓ Apply Settings
+        </button>
+      </div>
+
+      <!-- RIGHT: Invite Panel -->
+      <div class="priv-panel glass-strong priv-invite-panel">
+        <h3 class="priv-panel-title">🔗 Invite Friends</h3>
+
+        <div id="priv-lobby-invite-box" class="priv-invite-box">
+          <span class="priv-invite-url" id="priv-lobby-link-txt">Loading…</span>
+          <button id="btn-copy-lobby-link" class="copy-btn priv-copy-btn">
+            📋 Copy Link
+          </button>
+        </div>
+
+        <div id="priv-waiting-status" class="priv-waiting-status">
+          <div class="priv-waiting-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <p id="priv-waiting-text">Waiting for players to join…</p>
+        </div>
+      </div>
+
+    </div><!-- /priv-lobby-grid -->
+
+    <!-- Bottom Action Bar -->
+    <div class="priv-action-bar glass-strong">
+      <button id="btn-leave-priv-lobby" class="priv-leave-btn">
+        🚪 Leave Room
+      </button>
+      <div id="priv-start-area">
+        <div id="priv-min-players-notice" class="priv-min-notice">Need at least 2 players</div>
+        <button id="btn-host-start" class="primary-btn glow-btn priv-start-btn" disabled>
+          🎨 Start Drawing!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SCREEN 3: GAME
+══════════════════════════════════════ -->
+<div id="screen-game" class="screen">
+
+  <div class="game-header glass">
+    <div class="timer-ring-wrap" id="timer-wrap">
+      <svg class="timer-svg" viewBox="0 0 60 60">
+        <circle class="t-bg" cx="30" cy="30" r="25"/>
+        <circle id="t-fg" class="t-fg" cx="30" cy="30" r="25"/>
+      </svg>
+      <span id="timer-num" class="timer-num">100</span>
+    </div>
+
+    <div class="word-area">
+      <div id="word-display" class="word-display"></div>
+      <div id="word-meta" class="word-meta"></div>
+    </div>
+
+    <div class="header-right">
+      <span id="round-badge" class="round-badge">Round 1/3</span>
+      <label class="theme-toggle-label">
+        <input type="checkbox" class="theme-checkbox">
+        <div class="glass-slider">
+          <span class="icon sun">☀️</span>
+          <span class="icon moon">🌙</span>
+        </div>
+      </label>
+      <button id="btn-mute" class="icon-btn" title="Mute/Unmute">
+        <svg id="mute-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="game-body">
+    <div id="leaderboard-panel" class="panel glass">
+      <h3 class="panel-title">🏆 Players</h3>
+      <ul id="player-list" class="player-list"></ul>
+    </div>
+
+    <div class="canvas-col">
+      <div id="canvas-wrap" class="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+
+        <div id="rate-bar" class="hidden" style="position:absolute;top:10px;right:10px;display:flex;gap:8px;z-index:100;">
+          <button id="btn-like" class="icon-btn" style="background:rgba(46,204,135,0.9);color:#fff;border:none;">👍</button>
+          <button id="btn-dislike" class="icon-btn" style="background:rgba(240,82,94,0.9);color:#fff;border:none;">👎</button>
+        </div>
+
+        <div id="popup-color" class="tool-popup popup-over-canvas glass-strong hidden">
+          <div id="color-palette" class="color-palette"></div>
+          <input id="color-picker" type="color" class="native-picker" value="#000000">
+        </div>
+
+        <div id="popup-size" class="tool-popup popup-over-canvas glass-strong hidden">
+          <label class="size-label-txt">Size: <strong id="size-val-txt">3px</strong></label>
+          <input id="size-slider" class="size-slider" type="range" min="1" max="40" value="3">
+          <div class="size-preview-wrap"><div id="size-preview" class="size-preview"></div></div>
+        </div>
+
+        <div id="popup-shape" class="tool-popup popup-over-canvas glass-strong hidden">
+          <label class="size-label-txt">Shapes</label>
+          <div class="color-palette" style="display:flex;gap:10px;justify-content:center;">
+            <button class="c-swatch shape-btn" data-shape="line" style="border-radius:4px;background:#fff;color:#333;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #ccc;">╱</button>
+            <button class="c-swatch shape-btn" data-shape="rect" style="border-radius:4px;background:#fff;color:#333;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #ccc;">◻</button>
+            <button class="c-swatch shape-btn" data-shape="circle" style="border-radius:4px;background:#fff;color:#333;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #ccc;">◯</button>
+          </div>
+        </div>
+
+        <div id="overlay-waiting" class="overlay waiting-overlay hidden">
+          <div class="overlay-inner">
+            <span class="wait-spinner">🎨</span>
+            <h3 id="wait-title">Waiting for drawer…</h3>
+            <p id="wait-sub">Get ready to guess!</p>
+            <div id="invite-box-wait" class="share-link-box hidden">
+              <span id="share-link-txt" class="share-link-text">picazo.game/r/XXXX</span>
+              <button id="btn-copy-link" class="copy-btn">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="overlay-word-select" class="overlay word-select-overlay hidden">
+          <div class="ws-inner">
+            <div class="ws-header">
+              <h2>Choose a Word</h2>
+              <p>Pick one to draw! Time left: <span id="ws-timer" class="ws-clock">15</span>s</p>
+            </div>
+            <div class="ws-timer-bar-wrap"><div id="ws-timer-bar" class="ws-timer-bar"></div></div>
+            <div id="ws-cards" class="ws-cards"></div>
+          </div>
+        </div>
+
+        <div id="overlay-round-end" class="overlay round-end-overlay hidden">
+          <div class="re-inner glass-strong">
+            <div id="re-emoji" class="re-emoji">🎉</div>
+            <h2 id="re-title">Round Over!</h2>
+            <p id="re-word">The word was: <strong id="re-word-val">—</strong></p>
+            <div id="re-scores" class="re-scores"></div>
+            <button id="btn-save-round" class="secondary-btn" style="margin-top:10px;padding:10px;width:auto;align-self:center;">
+              <span class="btn-icon">💾</span> Save Masterpiece
+            </button>
+            <p class="re-next" id="re-next">Next round in <span id="re-countdown">5</span>s…</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-container">
+        <div id="toolbar" class="toolbar-glass">
+          <button class="tool-btn active" id="tool-pencil" data-tool="pencil" title="Pencil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          </button>
+          <button class="tool-btn" id="tool-fill" data-tool="fill" title="Fill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 11l-8-8-8.5 8.5a5.5 5.5 0 0 0 7.78 7.78L19 11z"/><path d="M20 23a3 3 0 0 0 0-6h-1l-3-3"/></svg>
+          </button>
+          <button class="tool-btn" id="tool-eraser" data-tool="eraser" title="Eraser">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 20H7L3 16l10-10 7 7-3.5 3.5"/><path d="M6.5 17.5l4-4"/></svg>
+          </button>
+          <div class="tool-divider"></div>
+          <button class="tool-btn" id="btn-shape-popup" data-tool="shape" title="Shapes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="10" height="10" rx="1" ry="1"></rect><circle cx="15" cy="15" r="6"></circle></svg>
+          </button>
+          <button class="tool-btn color-btn" id="btn-color-popup" title="Colors">
+            <div id="color-indicator" class="color-indicator-ring" style="background:#000"></div>
+          </button>
+          <button class="tool-btn" id="btn-size-popup" title="Brush Size">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+          </button>
+          <div class="tool-divider"></div>
+          <button class="tool-btn" id="tool-undo" title="Undo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+          </button>
+          <button class="tool-btn danger" id="tool-clear" title="Clear Canvas">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="chat-panel" class="panel glass">
+      <h3 class="panel-title">💬 Chat</h3>
+      <div id="chat-messages" class="chat-messages"></div>
+      <div class="chat-form">
+        <input id="chat-input" class="chat-input" type="text" placeholder="Type guess…" maxlength="60" autocomplete="off">
+        <button id="btn-chat-send" class="chat-send-btn" title="Send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Context Menu -->
+<div id="context-menu" class="context-menu glass-strong hidden">
+  <div class="ctx-head">
+    <div id="ctx-av" class="ctx-av"></div>
+    <div>
+      <div id="ctx-name" class="ctx-name">Player</div>
+      <div id="ctx-pts" class="ctx-pts">0 pts</div>
+    </div>
+  </div>
+  <button class="ctx-btn ctx-danger" id="ctx-host-kick" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Kick Player 👑
+  </button>
+  <button class="ctx-btn" id="ctx-transfer-host" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    Make Host 👑
+  </button>
+  <button class="ctx-btn" id="ctx-kick">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Vote to Kick
+  </button>
+  <button class="ctx-btn" id="ctx-report">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+    Report
+  </button>
+  <button class="ctx-btn" id="ctx-mute">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    Mute Locally
+  </button>
+  <button class="ctx-btn ctx-close" id="ctx-close">✕ Close</button>
+</div>
+
+<div id="vote-banner" class="vote-banner glass-strong hidden">
+  <div class="vote-banner-body">
+    <strong id="vote-title">Vote to kick Player?</strong>
+    <span id="vote-sub">Majority vote needed</span>
+  </div>
+  <button id="btn-vote-yes" class="vote-kick-btn">Kick 👢</button>
+  <button id="btn-vote-no" class="vote-keep-btn">Keep</button>
+</div>
+
+<div id="event-popup" class="event-popup hidden">
+  <div class="event-popup-inner">
+    <span id="event-popup-icon" class="event-icon">🎉</span>
+    <div id="event-popup-msg" class="event-msg">Player joined!</div>
+  </div>
+</div>
+
+<!-- PWA Install Banner -->
+<style>
+  @keyframes pwaPopUp {
+    from { opacity:0; transform:translateY(40px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+</style>
+<div id="pwa-install-banner" class="hidden" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:92%;max-width:400px;z-index:99999;pointer-events:none;">
+  <div class="glass-strong" style="pointer-events:auto;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:24px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.3);animation:pwaPopUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both;">
+    <span style="font-size:1.8rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.2));flex-shrink:0;">📱</span>
+    <div style="flex:1;min-width:0;">
+      <strong style="display:block;font-size:0.95rem;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Install Picazo</strong>
+      <span id="pwa-desc" style="font-size:0.75rem;color:var(--txt-mid);display:block;line-height:1.2;">Play fullscreen with full fun!</span>
+    </div>
+    <button id="btn-pwa-install" class="primary-btn glow-btn" style="width:auto;padding:8px 16px;font-size:0.85rem;border-radius:100px;flex-shrink:0;margin:0;min-width:80px;">Install</button>
+    <button id="btn-pwa-close" style="background:none;border:none;color:var(--txt-light);font-size:1.6rem;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1;margin-left:2px;">&times;</button>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="/script.js"></script>
+</body>
+</html>
