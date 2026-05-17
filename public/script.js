@@ -2000,50 +2000,34 @@ function resizeCanvas() {
   const wrap = document.getElementById('canvas-wrap');
   if (!wrap || !gameCanvas || !ctx) return;
 
-  // 1. Release the white card so CSS Flexbox can natively expand it
-  wrap.style.flex = ''; 
-  wrap.style.width = '';
-  wrap.style.height = '';
-  wrap.style.margin = '';
+  const W = Math.max(1, Math.floor(wrap.clientWidth));
+  const H = Math.max(1, Math.floor(wrap.clientHeight));
+  if (W <= 0 || H <= 0) return;
 
-  // 2. Measure the exact, maximum space CSS naturally gave the white card
-  const availW = wrap.clientWidth;
-  const availH = wrap.clientHeight;
-
-  if (availW <= 0 || availH <= 0) return;
-
-  // 3. Calculate the absolute largest 4:3 drawing box that fits inside
-  let W = availW;
-  let H = W * 0.75;
-
-  // If it overflows vertically, scale down by height instead to maximize area
-  if (H > availH) {
-    H = availH;
-    W = H / 0.75;
+  // Preserve the current artwork before the canvas gets resized
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = gameCanvas.width || W;
+  tempCanvas.height = gameCanvas.height || H;
+  const tempCtx = tempCanvas.getContext('2d');
+  if (tempCtx && gameCanvas.width > 0 && gameCanvas.height > 0) {
+    tempCtx.drawImage(gameCanvas, 0, 0);
   }
 
-  // 4. Lock ONLY the inner drawing canvas to the 4:3 math (Sync remains perfect!)
-  gameCanvas.style.width = W + 'px';
-  gameCanvas.style.height = H + 'px';
+  gameCanvas.style.width = `${W}px`;
+  gameCanvas.style.height = `${H}px`;
 
   S.dpr = window.devicePixelRatio || 1;
-  let oldData = null;
+  gameCanvas.width = Math.round(W * S.dpr);
+  gameCanvas.height = Math.round(H * S.dpr);
 
-  if (gameCanvas.width > 0 && gameCanvas.height > 0) {
-    oldData = ctx.getImageData(0, 0, gameCanvas.width, gameCanvas.height);
-  }
-
-  gameCanvas.width = W * S.dpr;
-  gameCanvas.height = H * S.dpr;
-
-  ctx.scale(S.dpr, S.dpr);
+  ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   ctx.fillStyle = 'white';
   ctx.fillRect(0, 0, W, H);
 
-  if (oldData) {
-    ctx.putImageData(oldData, 0, 0);
+  if (tempCtx) {
+    ctx.drawImage(tempCanvas, 0, 0, W, H);
   }
 }
 
