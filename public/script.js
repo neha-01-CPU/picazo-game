@@ -1,3 +1,5 @@
+'use strict';
+
 // 🔥 REGISTER PWA SERVICE WORKER & SMART INSTALL POPUP
 let deferredPrompt;
 
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ================================================================
    PICAZO — script.js  v43.0 (Shapes & Rating System)
 ================================================================ */
-'use strict';
+
 
 const socket = io();
 let hasVotedOnArt = false; // 🔥 ADDED: Spam filter lock for ratings
