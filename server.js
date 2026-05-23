@@ -453,7 +453,14 @@ io.on('connection', (socket) => {
       if (room.currentPhase === 'drawing') {
         room.strokeHistory.push(drawData);
         socket.broadcast.to(room.id).emit('drawing', drawData);
-        if (room.strokeHistory.length >= 150) socket.emit('requestSync');
+        
+        const now = Date.now();
+        // Only request a sync if there are enough strokes AND it has been at least 4 seconds since the last one
+        if (room.strokeHistory.length >= 250 && (!room.lastSync || now - room.lastSync > 4000)) {
+          socket.emit('requestSync');
+          room.lastSync = now;
+        }
+        
         if (room.strokeHistory.length > 1000) room.strokeHistory = room.strokeHistory.slice(-500);
       }
     } catch (e) { console.error('drawing error:', e); }
