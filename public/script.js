@@ -1568,7 +1568,7 @@ socket.on('requestSync', () => {
     return;
   }
   if (S.isDrawer && gameCanvas) {
-    socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL() }); 
+    socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL('image/webp', 0.5) }); 
   }
 });
 
@@ -2082,7 +2082,7 @@ function onDrawStart(e) {
   if (S.tool === 'fill') { 
     floodFill(pos.x, pos.y, S.color); 
     S.isDrawing = false; 
-    socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL() }); 
+    socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL('image/webp', 0.5) }); 
     return; 
   }
   
@@ -2166,7 +2166,7 @@ function onDrawEnd(e) {
   
   // 🔥 ADDED: Shape Sync Logic (Uses the Heavy Canvas framework!)
   if (S.tool === 'shape' && gameCanvas) {
-      socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL() });
+      socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL('image/webp', 0.5) });
       return;
   }
 
@@ -2344,7 +2344,7 @@ function triggerUndo() {
     ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height); 
   }
   
-  socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL() });
+  socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL('image/webp', 0.5) });
 }
 
 function triggerClear() {
@@ -2353,7 +2353,7 @@ function triggerClear() {
   ctx.fillStyle = 'white'; 
   ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height); 
   
-  socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL() });
+  socket.emit('canvasCommand', { cmd: 'sync', data: gameCanvas.toDataURL('image/webp', 0.5) });
 }
 
 /* ════════════════════════════════════════════
