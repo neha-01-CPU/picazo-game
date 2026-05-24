@@ -634,42 +634,45 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fillText(`${signaturePrefix} 🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 85);
       eCtx.restore(); 
 
-      // 🔥 11. THE MEME AVATAR LOGIC (Async Load)
-      
-      // Update these arrays with the exact filenames of the memes you saved!
-     // Update the array to point to your new SVG!
-      const roastMemes = ['/memes/troll-face.svg']; 
-      const praiseMemes = ['/memes/troll-face.svg']; // (Keep your praise ones here)
-      
+    // 🔥 11. THE MEME AVATAR LOGIC (Bottom-Right, Larger Size)
+      const roastMemes = ['/memes/disappointed.svg', '/memes/facepalm.svg']; 
+      const praiseMemes = ['/memes/smart.svg', '/memes/mind-blown.svg'];
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       const selectedMeme = activeMemes[Math.floor(Math.random() * activeMemes.length)];
 
       const memeImg = new Image();
-      memeImg.crossOrigin = "anonymous"; // Prevents canvas security errors
+      memeImg.crossOrigin = "anonymous";
       memeImg.src = selectedMeme;
 
-      // Because images take a split second to load, we wrap the final export inside this onload function
       memeImg.onload = () => {
-          // Draw the meme in the bottom left corner, overlapping the frame slightly
-          const memeSize = 110; 
-          const memeX = pSide - 10; 
+          // Increased size to 160 and placed in bottom-right corner
+          const memeSize = 160; 
+          const memeX = cardW - memeSize - 20; 
           const memeY = pTop + gameCanvas.height - 20; 
           eCtx.drawImage(memeImg, memeX, memeY, memeSize, memeSize);
           
-          finishExport(); // Call the final steps
-      };
-
-      memeImg.onerror = () => {
-          // If the meme file is missing or misspelled, export normally without crashing
-          console.warn("Meme image failed to load:", selectedMeme);
           finishExport(); 
       };
 
-      // 12. Final Export Steps
+      memeImg.onerror = () => {
+          finishExport(); 
+      };
+
       function finishExport() {
+          // Draw Artist Signature above the meme or clearly visible
+          let drawerName = (S.drawerIdx >= 0 && S.players[S.drawerIdx]) ? S.players[S.drawerIdx].name : "Artist";
+          if (S.isDrawer) drawerName = S.playerName;
+          
+          eCtx.textAlign = 'right';
+          eCtx.font = 'normal 32px Boogaloo, cursive';
+          eCtx.fillStyle = '#64748b'; 
+          const sigPrefix = isRoast ? "Apology by" : "Masterpiece by";
+          // Placed above the meme avatar area
+          eCtx.fillText(`${sigPrefix} 🖌 ${drawerName}`, cardW - 20, pTop + gameCanvas.height + 60);
+
           eCtx.restore(); // Restore main rotation
 
-          // Viral Footer
+          // Footer
           eCtx.textAlign = 'center';
           eCtx.shadowColor = 'rgba(0,0,0,0.5)';
           eCtx.shadowBlur = 10;
@@ -678,22 +681,16 @@ document.addEventListener('DOMContentLoaded', () => {
           eCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
           eCtx.fillText(isRoast ? 'Think you can do better?' : 'Want to play too?', exportCanvas.width / 2, exportCanvas.height - 90);
           eCtx.font = '900 42px Nunito, sans-serif';
-          eCtx.fillStyle = '#ffffff'; 
           eCtx.fillText('Prove it at PICAZO.COM 🚀', exportCanvas.width / 2, exportCanvas.height - 40);
 
-          // Trigger Download
+          // Download Trigger
           const link = document.createElement('a');
           link.download = `Picazo_${safeWord}.png`;
           link.href = exportCanvas.toDataURL('image/png', 1.0); 
           link.click();
           
           showToast('📸 Image saved!', 't-info');
-          
-          const originalHTML = btnElement.innerHTML;
-          btnElement.innerHTML = '<span class="btn-icon">✅</span> Saved!';
-          setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
       }
-  } // <-- End of generatePolaroid function
 
  // Attach the dual listeners
   if (btnRoast) btnRoast.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(true, btnRoast); });
