@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRoast = $('btn-roast-round');
   const btnPraise = $('btn-praise-round');
 
-  // 🔥 UPGRADED POLAROID GENERATOR (Updated logic, dimensions, repositioning, and style)
+ // 🔥 UPGRADED POLAROID GENERATOR (Updated dimensions, positioning, and avatar size)
   function generatePolaroid(isRoast, btnElement) {
       const exportCanvas = document.createElement('canvas');
       const eCtx = exportCanvas.getContext('2d');
@@ -507,14 +507,14 @@ document.addEventListener('DOMContentLoaded', () => {
       // Setup Text
       const safeWord = S.currentWord ? S.currentWord.toUpperCase() : 'MASTERPIECE';
 
-      // 1. Dimensions (Increased bottom padding to accommodate large meme avatar)
+      // 1. Dimensions (Maintain large bottom padding for avatar & signature)
       const bgPadTop = 260;  
       const bgPadBot = 160;  
       const bgPadSide = 120; 
       
-      const pSide = 40;   // Polaroid side border
-      const pTop = 40;    // Polaroid top border
-      const pBot = 230;   // 🔥 FIXED: Significantly increased to accommodate large avatar below artwork
+      const pSide = 40;   
+      const pTop = 40;    
+      const pBot = 230;   // Maintain large bottom padding for avatar & text
 
       const cardW = gameCanvas.width + (pSide * 2);
       const cardH = gameCanvas.height + pTop + pBot;
@@ -522,24 +522,24 @@ document.addEventListener('DOMContentLoaded', () => {
       exportCanvas.width = cardW + (bgPadSide * 2);
       exportCanvas.height = cardH + bgPadTop + bgPadBot;
 
-      // 2. Seamless Sophisticated Background Gradient (Requirement #1 - Dark and Better)
-      const bgGrad = eCtx.createLinearGradient(0, exportCanvas.height, exportCanvas.width, 0); // Diag top-right
+      // 2. Sophisticated Background Gradient
+      const bgGrad = eCtx.createLinearGradient(0, exportCanvas.height, exportCanvas.width, 0);
       bgGrad.addColorStop(0, '#0f172a'); // Very Deep Navy
       bgGrad.addColorStop(0.5, '#1e293b'); // Navy Gray
       bgGrad.addColorStop(1, '#6b21a8'); // Rich Purple Accent
       eCtx.fillStyle = bgGrad;
       eCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
 
-      // 3. Header Tagline (Keep)
+      // 3. Header Tagline
       eCtx.textAlign = 'center';
       eCtx.font = '800 26px Nunito, sans-serif';
-      eCtx.fillStyle = '#fde047'; // Yellow accent
+      eCtx.fillStyle = '#fde047'; 
       eCtx.shadowColor = 'rgba(0,0,0,0.5)';
       eCtx.shadowBlur = 8;
       eCtx.shadowOffsetY = 3;
       eCtx.fillText(isRoast ? 'Sketch it. Guess it. Troll it.' : 'Sketch it. Guess it. Win it.', exportCanvas.width / 2, 60);
 
-      // 4. "Expectation" Text (The Meme Setup) (Keep)
+      // 4. "Expectation" Text
       eCtx.font = '800 36px Nunito, sans-serif';
       eCtx.fillStyle = 'rgba(255,255,255,0.9)';
       eCtx.fillText(isRoast ? 'They were supposed to draw:' : 'The prompt was:', exportCanvas.width / 2, 130);
@@ -556,14 +556,13 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.shadowBlur = 0;
       eCtx.shadowOffsetY = 0;
 
-      // 5. Context Rotation ( Органическая укладка ) (Keep)
+      // 5. Context Rotation
       eCtx.save();
-      // translate relative to global canvas top (padded)
       eCtx.translate(exportCanvas.width / 2, bgPadTop + (cardH / 2) - 15); 
-      eCtx.rotate(1.8 * Math.PI / 180); // Gentle tilt
-      eCtx.translate(-cardW / 2, -cardH / 2); // Local origin to card top-left
+      eCtx.rotate(1.8 * Math.PI / 180); 
+      eCtx.translate(-cardW / 2, -cardH / 2);
 
-      // 6. Draw Polaroid Base (Keep)
+      // 6. Draw Polaroid Base
       eCtx.shadowColor = 'rgba(0, 0, 0, 0.45)';
       eCtx.shadowBlur = 50;
       eCtx.shadowOffsetY = 25;
@@ -573,23 +572,21 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fill();
       eCtx.shadowColor = 'transparent';
 
-      // 7. Draw The Art Frame (Background) (Keep)
+      // 7. Draw The Art Frame (Background)
       eCtx.fillStyle = '#f8fafc'; 
       eCtx.fillRect(pSide, pTop, gameCanvas.width, gameCanvas.height);
       eCtx.strokeStyle = 'rgba(0,0,0,0.05)';
       eCtx.lineWidth = 2;
       eCtx.strokeRect(pSide, pTop, gameCanvas.width, gameCanvas.height);
 
-      // 8. Stamp the actual Game Canvas (Clean, undisturbed!) (Requirement #2 - undisturbed)
+      // 8. Stamp the actual Game Canvas (Clean, undisturbed)
       eCtx.drawImage(gameCanvas, pSide, pTop);
 
-      // (🔥 DYNAMIC STAMP LOGIC REMOVED per requirement #2)
-
-      // 9. Aesthetic "Washi Tape" (Keep)
+      // 9. Aesthetic "Washi Tape"
       eCtx.save();
-      eCtx.translate(cardW / 2, 0); // Center relative to card top
+      eCtx.translate(cardW / 2, 0); 
       eCtx.rotate(-3 * Math.PI / 180);
-      eCtx.fillStyle = 'rgba(255, 250, 240, 0.9)'; // Off-white tape
+      eCtx.fillStyle = 'rgba(255, 250, 240, 0.9)'; 
       eCtx.shadowColor = 'rgba(0, 0, 0, 0.15)';
       eCtx.shadowBlur = 8;
       eCtx.shadowOffsetY = 4;
@@ -601,14 +598,12 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fill();
       eCtx.restore();
 
-      // --- 🔥 NEW COMBINED SIGNATURE AND AVATAR LOGIC (Req #3, #4) ---
-
-      // Set Font styles
+      // Set Font styles for Signature
       eCtx.textAlign = 'right';
       eCtx.font = 'normal 48px Boogaloo, cursive';
       const sigGrad = eCtx.createLinearGradient(cardW - 400, 0, cardW - 30, 0);
-      sigGrad.addColorStop(0, '#8b5cf6'); // Purple
-      sigGrad.addColorStop(1, '#ec4899'); // Pink
+      sigGrad.addColorStop(0, '#8b5cf6'); 
+      sigGrad.addColorStop(1, '#ec4899'); 
       eCtx.fillStyle = sigGrad;
 
       // Figure out Name
@@ -619,29 +614,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const sigPrefix = isRoast ? "Apology by" : "Masterpiece by";
       const fullSig = `${sigPrefix} 🖌 ${drawerName}`;
 
-      // Sig positioning relative to card context start (within thick pBot)
-      const sigLineY = cardH - 30; // 30px up from base
+      // Sig positioning (Keep in bottom-right)
+      const sigLineY = cardH - 30; // near bottom edge
       const sigRightX = cardW - pSide - 10;
       
-      // Draw Signature line near the bottom edge
+      // Draw Signature line
       eCtx.fillText(fullSig, sigRightX, sigLineY);
 
-      // 🔥 10. Meme Avatar (Resized, Positioned above signature line)
-      // 🔥 FIXED: Added all missing commas and quotes so the game won't crash!
-      const roastMemes = [
-          '/memes/Roast/Baldman.svg', 
-          '/memes/Roast/confused-girl.svg', 
-          '/memes/Roast/eating.svg', 
-          '/memes/Roast/hiding.svg'
-      ]; 
-
-      const praiseMemes = [
-          '/memes/Praise/Lovely-butterfly.svg', 
-          '/memes/Praise/cheers.svg', 
-          '/memes/Praise/hehe-boi.svg', 
-          '/memes/Praise/think-about-it.svg', 
-          '/memes/Praise/tony.svg'
-      ];
+      // 🔥 10. Meme Avatar (Resized, Repositioned to Bottom-Left on the canvas frame)
+      
       // Select appropriate meme
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       if (!activeMemes || activeMemes.length === 0) {
@@ -656,14 +637,16 @@ document.addEventListener('DOMContentLoaded', () => {
       memeImg.src = selectedMeme;
 
       memeImg.onload = () => {
-          // Increased size to 190 and placed above the signature line
-          const memeSize = 190; 
+          // 🔥 NEW SIZING & POSITIONING (Req #3, #4)
           
-          // Right aligned with the signature area padding
-          const memeX = sigRightX - memeSize;
+          // Size increased to 220px (massive!)
+          const memeSize = 220; 
           
-          // Positioned perfectly in pBot, above signature base (no canvas disturbance!)
-          const memeY = (sigLineY - 10) - memeSize; 
+          // Positioned in Bottom-Left corner of the Polaroid frame
+          const memeX = pSide - 20; 
+          
+          // Positioned above the signature line level (within pBot)
+          const memeY = cardH - memeSize - 20; 
 
           eCtx.drawImage(memeImg, memeX, memeY, memeSize, memeSize);
           
@@ -679,7 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
       function finishExport() {
           eCtx.restore(); // Restore global context rotation/translation
 
-          // 12. Viral Footer Call-To-Action (Keep)
+          // 12. Viral Footer Call-To-Action
           eCtx.textAlign = 'center';
           eCtx.shadowColor = 'rgba(0,0,0,0.5)';
           eCtx.shadowBlur = 10;
