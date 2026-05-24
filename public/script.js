@@ -1790,33 +1790,21 @@ function renderWordBlanks() {
     return; 
   }
   
-  // Change this line:
-wordMeta.textContent = S.isDrawer ? `You are drawing — ${S.currentWord.length} letters` : `${S.currentWord.length} letters`;
+  wordMeta.textContent = S.isDrawer ? `You are drawing — ${S.currentWord.length} letters` : `${S.currentWord.length} letters`;
 
-// To this (it removes spaces before counting):
-const letterCount = S.currentWord.replace(/\s/g, '').length;
-wordMeta.textContent = S.isDrawer ? `You are drawing — ${letterCount} letters` : `${letterCount} letters`;
   for (let i = 0; i < S.currentWord.length; i++) {
     const ch = S.currentWord[i];
-
-    if (ch === ' ') {
-      // Create a visual gap for the space
-      const gap = document.createElement('div');
-      gap.className = 'wb-space';
-      wordDisplay.appendChild(gap);
-    } else {
-      // Create a letter box
-      const grp = document.createElement('div');
-      grp.className = 'wb-group'; 
-      const charEl = document.createElement('div');
-      
-      const revealed = S.revealedIdx.includes(i);
-      charEl.className = 'wb-char' + (revealed && !S.isDrawer ? ' reveal' : '');
-      charEl.textContent = S.isDrawer || revealed ? ch.toUpperCase() : '';
-      
-      grp.appendChild(charEl); 
-      wordDisplay.appendChild(grp);
-    }
+    const grp = document.createElement('div');
+    const charEl = document.createElement('div');
+    
+    grp.className = 'wb-group'; 
+    const revealed = S.revealedIdx.includes(i);
+    charEl.className = 'wb-char' + (revealed && !S.isDrawer ? ' reveal' : '');
+    charEl.textContent = S.isDrawer || revealed ? ch.toUpperCase() : '';
+    
+    grp.appendChild(charEl); 
+    grp.insertAdjacentHTML('beforeend', `<div class="wb-line" style="width:20px"></div>`);
+    wordDisplay.appendChild(grp);
   }
 }
 
