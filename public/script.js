@@ -634,9 +634,21 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fillText(`${signaturePrefix} 🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 85);
       eCtx.restore(); 
 
-    // 🔥 11. THE MEME AVATAR LOGIC (Bottom-Right, positioned above signature)
-     const roastMemes = ['/memes/troll-face.svg']; 
-      const praiseMemes = ['/memes/troll-face.svg'];
+   // 🔥 UPDATED: Using the exact paths from your folder structure
+const roastMemes = [
+    '/memes/Roast/Baldman.svg', 
+    '/memes/Roast/confused-girl.svg', 
+    '/memes/Roast/eating.svg'
+    '/memes/Roast/hiding.svg'
+]; 
+
+const praiseMemes = [
+    '/memes/Praise/Lovely-butterfly.svg', 
+    '/memes/Praise/cheers.svg', 
+    '/memes/Praise/hehe-boi.svg'
+    '/memes/Praise/think-about-it.svg
+    '/memes/Praise/tony.svg
+];
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       const selectedMeme = activeMemes[Math.floor(Math.random() * activeMemes.length)];
 
