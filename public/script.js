@@ -1879,9 +1879,12 @@ function showRoundEndUI(word, allGuessed) {
   }
   if (S.isDrawer) drawerName = S.playerName; 
   
-  // Update the Roast button dynamically!
+ // Update BOTH buttons dynamically with the new Emojis!
   if ($('btn-roast-round')) {
-      $('btn-roast-round').innerHTML = `<span class="btn-icon">🔥</span> Roast ${escHtml(drawerName)}`;
+      $('btn-roast-round').innerHTML = `<span class="btn-icon" style="font-size: 1.2rem;">😈</span> Roast ${escHtml(drawerName)}`;
+  }
+  if ($('btn-praise-round')) {
+      $('btn-praise-round').innerHTML = `<span class="btn-icon" style="font-size: 1.2rem;">🥰</span> Praise ${escHtml(drawerName)}`;
   }
 
   addChat('system', '', `⏰ Turn over! Word was: "${word}"`);
