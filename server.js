@@ -293,7 +293,17 @@ function endTurn(room, allGuessed) {
 io.on('connection', (socket) => {
   console.log('⚡ Connected! Socket:', socket.id);
   socket.eventCount = 0;
-  const rateInterval = setInterval(() => { socket.eventCount = 0; }, 1000);
+  
+  // 🔥 NEW: Timestamp-based rate limiting (zero background timers!)
+  socket.lastEventReset = Date.now();
+  socket.use((packet, next) => {
+    const now = Date.now();
+    if (now - socket.lastEventReset > 1000) {
+      socket.eventCount = 0;
+      socket.lastEventReset = now;
+    }
+    next();
+  });
 
   socket.on('joinGame', (userData) => {
     try {
@@ -617,7 +627,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     try {
-      clearInterval(rateInterval);
       if (!socket.roomId) return;
       const room = rooms[socket.roomId];
       if (!room) return;
