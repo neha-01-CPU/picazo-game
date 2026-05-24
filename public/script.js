@@ -1824,6 +1824,9 @@ function renderWordBlanks() {
 function showRoundEndUI(word, allGuessed) {
   addChat('system', '', `⏰ Turn over! Word was: "${word}"`);
   
+  // Update the global state with the revealed word so the Masterpiece export uses it!
+  S.currentWord = word; 
+  
   const oldBtnWrap = document.getElementById('podium-btns');
   if (oldBtnWrap) { 
     oldBtnWrap.style.display = 'none'; 
@@ -1839,6 +1842,7 @@ function showRoundEndUI(word, allGuessed) {
   }
 
   if ($('re-scores')) {
+// ... rest of the function remains exactly the same
       $('re-scores').innerHTML = sorted.map((p, i) => {
         let medal = '';
         if (i === 0) medal = '🥇';
