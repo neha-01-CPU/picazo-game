@@ -637,8 +637,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // 🔥 11. THE MEME AVATAR LOGIC (Async Load)
       
       // Update these arrays with the exact filenames of the memes you saved!
-      const roastMemes = ['/memes/disappointed.png', '/memes/facepalm.png']; 
-      const praiseMemes = ['/memes/smart.png', '/memes/mind-blown.png'];
+     // Update the array to point to your new SVG!
+      const roastMemes = ['/memes/troll-face.svg']; 
+      const praiseMemes = ['/memes/troll-face.svg']; // (Keep your praise ones here)
       
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       const selectedMeme = activeMemes[Math.floor(Math.random() * activeMemes.length)];
