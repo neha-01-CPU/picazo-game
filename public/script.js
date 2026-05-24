@@ -678,9 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
           sigGrad.addColorStop(1, '#ec4899'); 
           eCtx.fillStyle = sigGrad; 
           
-          // Original Artist Signature (Positioned at the very bottom right)
-          eCtx.fillText(`🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 110);
-
+         
           // 11. Viral Footer Call-To-Action
           eCtx.textAlign = 'center';
           eCtx.shadowColor = 'rgba(0,0,0,0.5)';
