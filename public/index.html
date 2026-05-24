@@ -301,9 +301,14 @@
             <h2 id="re-title">Round Over!</h2>
             <p id="re-word">The word was: <strong id="re-word-val">—</strong></p>
             <div id="re-scores" class="re-scores"></div>
-            <button id="btn-save-round" class="secondary-btn" style="margin-top:10px;padding:10px;width:auto;align-self:center;">
-              <span class="btn-icon">💾</span> Save Masterpiece
-            </button>
+            <div style="display:flex; gap:10px; margin-top:15px; justify-content:center; flex-wrap:wrap; width:100%;">
+              <button id="btn-roast-round" class="secondary-btn" style="padding:10px 16px; width:auto; border-color:rgba(240,82,94,0.5); color:var(--red); background:rgba(240,82,94,0.1);">
+                <span class="btn-icon">🔥</span> Roast Artist
+              </button>
+              <button id="btn-praise-round" class="primary-btn glow-btn" style="padding:10px 16px; width:auto; font-size:0.95rem;">
+                <span class="btn-icon">🌟</span> Save Masterpiece
+              </button>
+            </div>
             <p class="re-next" id="re-next">Next round in <span id="re-countdown">5</span>s…</p>
           </div>
         </div>
