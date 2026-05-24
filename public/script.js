@@ -496,69 +496,66 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 🔥 NEW: Save Masterpiece Listener at Round End (Perfect Viral Edition)
-  const btnSaveRound = $('btn-save-round');
-  if (btnSaveRound) {
-    btnSaveRound.addEventListener('click', (e) => { 
-      e.stopPropagation();
-      
+  const btnRoast = $('btn-roast-round');
+  const btnPraise = $('btn-praise-round');
+
+  function generatePolaroid(isRoast, btnElement) {
       const exportCanvas = document.createElement('canvas');
       const eCtx = exportCanvas.getContext('2d');
 
-      // 1. Dynamic Padding (Increased to make the Polaroid look slightly smaller/better framed!)
-      const bgPadTop = 230;  // Massive room for the Word and Tagline
-      const bgPadBot = 160;  // Lots of room for the 2-line footer
-      const bgPadSide = 120; // Wider margins on the left/right
-      
-      const pSide = 40;   // Polaroid border
+      const bgPadTop = 260;  
+      const bgPadBot = 160;  
+      const bgPadSide = 120; 
+      const pSide = 40;   
       const pTop = 40;    
-      const pBot = 140;   // Thick bottom border for the Artist's signature
+      const pBot = 140;   
 
       const cardW = gameCanvas.width + (pSide * 2);
       const cardH = gameCanvas.height + pTop + pBot;
-      
       exportCanvas.width = cardW + (bgPadSide * 2);
       exportCanvas.height = cardH + bgPadTop + bgPadBot;
 
-      // 2. Seamless Vibrant Background Gradient
+      // Background Gradient
       const bgGrad = eCtx.createLinearGradient(0, 0, exportCanvas.width, exportCanvas.height);
-      bgGrad.addColorStop(0, '#3b82f6'); // Electric Blue
-      bgGrad.addColorStop(0.35, '#8b5cf6'); // Rich Purple
-      bgGrad.addColorStop(0.7, '#ec4899'); // Hot Pink
-      bgGrad.addColorStop(1, '#f97316'); // Vibrant Orange
+      bgGrad.addColorStop(0, '#3b82f6'); 
+      bgGrad.addColorStop(0.35, '#8b5cf6'); 
+      bgGrad.addColorStop(0.7, '#ec4899'); 
+      bgGrad.addColorStop(1, '#f97316'); 
       eCtx.fillStyle = bgGrad;
       eCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
 
-      // 3. Highlighted Header Tagline
+      // Header Tagline
       eCtx.textAlign = 'center';
       eCtx.font = '800 26px Nunito, sans-serif';
-      eCtx.fillStyle = '#fde047'; // Bright glowing yellow to highlight it!
+      eCtx.fillStyle = '#fde047'; 
       eCtx.shadowColor = 'rgba(0,0,0,0.5)';
       eCtx.shadowBlur = 8;
       eCtx.shadowOffsetY = 3;
-      eCtx.fillText('Sketch it. Guess it. Win it.', exportCanvas.width / 2, 60);
+      eCtx.fillText(isRoast ? 'Sketch it. Guess it. Troll it.' : 'Sketch it. Guess it. Win it.', exportCanvas.width / 2, 60);
 
-      // 4. The Word (Massive and bold at the top)
+      // Setup Text
       const safeWord = S.currentWord ? S.currentWord.toUpperCase() : 'MASTERPIECE';
-      eCtx.font = '900 76px Nunito, sans-serif';
+      eCtx.font = '800 36px Nunito, sans-serif';
+      eCtx.fillStyle = 'rgba(255,255,255,0.9)';
+      eCtx.fillText(isRoast ? 'They were supposed to draw:' : 'The prompt was:', exportCanvas.width / 2, 130);
+
+      eCtx.font = '900 80px Nunito, sans-serif';
       eCtx.fillStyle = '#ffffff';
       eCtx.shadowColor = 'rgba(0,0,0,0.4)';
       eCtx.shadowBlur = 15;
       eCtx.shadowOffsetY = 6;
-      eCtx.fillText(`Word: ${safeWord}`, exportCanvas.width / 2, 150);
+      eCtx.fillText(`"${safeWord}"`, exportCanvas.width / 2, 220);
       
-      // Reset shadow for the Polaroid card
       eCtx.shadowColor = 'transparent';
       eCtx.shadowBlur = 0;
       eCtx.shadowOffsetY = 0;
 
-      // 5. Rotate context to place the Polaroid organically
+      // Draw Polaroid
       eCtx.save();
-      // Center the origin point perfectly between the header and footer
       eCtx.translate(exportCanvas.width / 2, bgPadTop + (cardH / 2) - 15); 
-      eCtx.rotate(1.8 * Math.PI / 180); // Gentle tilt to the right
+      eCtx.rotate(1.8 * Math.PI / 180); 
       eCtx.translate(-cardW / 2, -cardH / 2);
 
-      // 6. Draw Polaroid Base
       eCtx.shadowColor = 'rgba(0, 0, 0, 0.45)';
       eCtx.shadowBlur = 50;
       eCtx.shadowOffsetY = 25;
@@ -568,17 +565,42 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fill();
       eCtx.shadowColor = 'transparent';
 
-      // 7. Draw The Art Frame
       eCtx.fillStyle = '#f8fafc'; 
       eCtx.fillRect(pSide, pTop, gameCanvas.width, gameCanvas.height);
       eCtx.strokeStyle = 'rgba(0,0,0,0.05)';
       eCtx.lineWidth = 2;
       eCtx.strokeRect(pSide, pTop, gameCanvas.width, gameCanvas.height);
 
-      // 8. Stamp the actual Game Canvas
       eCtx.drawImage(gameCanvas, pSide, pTop);
 
-      // 9. Aesthetic "Washi Tape"
+      // 🔥 DYNAMIC STAMP LOGIC
+      const roastStamps = ["PICASSO IS WEEPING", "WHAT EVEN IS THIS?", "ABSOLUTE TRASH", "NAILED IT.", "A+ FOR EFFORT"];
+      const praiseStamps = ["BELONGS IN A MUSEUM", "10 / 10", "ABSOLUTE MASTERPIECE", "GORGEOUS", "FLAWLESS"];
+      
+      const stamps = isRoast ? roastStamps : praiseStamps;
+      const stampText = stamps[Math.floor(Math.random() * stamps.length)];
+      
+      eCtx.save();
+      eCtx.translate(pSide + gameCanvas.width / 2, pTop + gameCanvas.height / 2); 
+      eCtx.rotate((Math.random() - 0.5) * 0.4); 
+      
+      eCtx.font = '900 55px "Courier New", Courier, monospace';
+      eCtx.textAlign = 'center';
+      eCtx.textBaseline = 'middle';
+      
+      // Style changes based on Roast vs Praise
+      eCtx.strokeStyle = isRoast ? 'rgba(220, 38, 38, 0.85)' : 'rgba(244, 185, 66, 0.95)';
+      eCtx.lineWidth = 6;
+      eCtx.fillStyle = isRoast ? 'rgba(220, 38, 38, 0.3)' : 'rgba(244, 185, 66, 0.2)';
+      
+      const textMetrics = eCtx.measureText(stampText);
+      const sPad = 25;
+      eCtx.strokeRect(-textMetrics.width/2 - sPad, -40, textMetrics.width + sPad*2, 80);
+      eCtx.fillText(stampText, 0, 5); 
+      eCtx.strokeText(stampText, 0, 5); 
+      eCtx.restore(); 
+
+      // Tape
       eCtx.save();
       eCtx.translate(cardW / 2, 0);
       eCtx.rotate(-3 * Math.PI / 180);
@@ -586,21 +608,15 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.shadowColor = 'rgba(0, 0, 0, 0.15)';
       eCtx.shadowBlur = 8;
       eCtx.shadowOffsetY = 4;
-      
       eCtx.beginPath();
       eCtx.moveTo(-100, -20);
       eCtx.lineTo(105, -25);
       eCtx.lineTo(95, 22);
       eCtx.lineTo(-105, 26);
       eCtx.fill();
-      
-      eCtx.strokeStyle = 'rgba(0,0,0,0.03)';
-      eCtx.lineWidth = 1;
-      eCtx.beginPath(); eCtx.moveTo(-60, -22); eCtx.lineTo(-55, 22); eCtx.stroke();
-      eCtx.beginPath(); eCtx.moveTo(60, -24); eCtx.lineTo(55, 21); eCtx.stroke();
       eCtx.restore();
 
-      // 10. Artist Signature (Bottom Right)
+      // Signature
       let drawerName = "An Artist";
       if (S.drawerIdx >= 0 && S.players[S.drawerIdx]) {
           drawerName = S.players[S.drawerIdx].name;
@@ -609,56 +625,43 @@ document.addEventListener('DOMContentLoaded', () => {
       
       eCtx.textAlign = 'right';
       eCtx.font = 'normal 48px Boogaloo, cursive';
-      
       const sigGrad = eCtx.createLinearGradient(cardW - 400, 0, cardW - 30, 0);
-      sigGrad.addColorStop(0, '#8b5cf6'); // Purple
-      sigGrad.addColorStop(1, '#ec4899'); // Pink
-      
+      sigGrad.addColorStop(0, '#8b5cf6'); 
+      sigGrad.addColorStop(1, '#ec4899'); 
       eCtx.fillStyle = sigGrad; 
-      eCtx.fillText(`Artist 🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 85);
+      
+      const signaturePrefix = isRoast ? "Apology by" : "Masterpiece by";
+      eCtx.fillText(`${signaturePrefix} 🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 85);
+      eCtx.restore(); 
 
-      eCtx.restore(); // Restore main rotation
-
-      // 11. Viral Footer Call-To-Action (Split into TWO lines!)
+      // Footer
       eCtx.textAlign = 'center';
       eCtx.shadowColor = 'rgba(0,0,0,0.5)';
       eCtx.shadowBlur = 10;
       eCtx.shadowOffsetY = 4;
-      
-      // Line 1: The Challenge
       eCtx.font = '800 32px Nunito, sans-serif';
       eCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
-      eCtx.fillText('Think you can draw better?', exportCanvas.width / 2, exportCanvas.height - 90);
-      
-      // Line 2: The Link (Larger, pure white)
+      eCtx.fillText(isRoast ? 'Think you can do better?' : 'Want to play too?', exportCanvas.width / 2, exportCanvas.height - 90);
       eCtx.font = '900 42px Nunito, sans-serif';
       eCtx.fillStyle = '#ffffff'; 
       eCtx.fillText('Prove it at PICAZO.COM 🚀', exportCanvas.width / 2, exportCanvas.height - 40);
 
-      // 12. Trigger the High-Res Download
+      // Download
       const link = document.createElement('a');
       link.download = `Picazo_${safeWord}.png`;
       link.href = exportCanvas.toDataURL('image/png', 1.0); 
       link.click();
       
-      showToast('📸 Viral Masterpiece saved!', 't-info');
+      showToast('📸 Image saved!', 't-info');
       
-      // Button Feedback
-      const originalHTML = btnSaveRound.innerHTML;
-      btnSaveRound.innerHTML = '<span class="btn-icon">✅</span> Saved!';
-      btnSaveRound.style.background = 'rgba(46,204,135,0.2)';
-      btnSaveRound.style.borderColor = 'var(--green)';
-      btnSaveRound.style.color = 'var(--green)';
-      
-      setTimeout(() => {
-        btnSaveRound.innerHTML = originalHTML;
-        btnSaveRound.style.background = '';
-        btnSaveRound.style.borderColor = '';
-        btnSaveRound.style.color = '';
-      }, 2000);
-    });
+      const originalHTML = btnElement.innerHTML;
+      btnElement.innerHTML = '<span class="btn-icon">✅</span> Saved!';
+      setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
   }
-});
+
+  // Attach the dual listeners
+  if (btnRoast) btnRoast.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(true, btnRoast); });
+  if (btnPraise) btnPraise.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(false, btnPraise); });
 
 /* ════════════════════════════════════════════
    CONNECTION & LOBBY LOGIC
@@ -1821,7 +1824,17 @@ function renderWordBlanks() {
     wordDisplay.appendChild(grp);
   }
 }
-
+// Figure out who drew this round
+  let drawerName = "The Artist";
+  if (S.drawerIdx >= 0 && S.players[S.drawerIdx]) {
+      drawerName = S.players[S.drawerIdx].name;
+  }
+  if (S.isDrawer) drawerName = S.playerName; 
+  
+  // Update the Roast button dynamically!
+  if ($('btn-roast-round')) {
+      $('btn-roast-round').innerHTML = `<span class="btn-icon">🔥</span> Roast ${escHtml(drawerName)}`;
+  }
 function showRoundEndUI(word, allGuessed) {
   addChat('system', '', `⏰ Turn over! Word was: "${word}"`);
   
