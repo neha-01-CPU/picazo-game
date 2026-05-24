@@ -627,7 +627,21 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fillText(fullSig, sigRightX, sigLineY);
 
       // 🔥 10. Meme Avatar (Resized, Positioned above signature line)
-      
+      // 🔥 FIXED: Added all missing commas and quotes so the game won't crash!
+      const roastMemes = [
+          '/memes/Roast/Baldman.svg', 
+          '/memes/Roast/confused-girl.svg', 
+          '/memes/Roast/eating.svg', 
+          '/memes/Roast/hiding.svg'
+      ]; 
+
+      const praiseMemes = [
+          '/memes/Praise/Lovely-butterfly.svg', 
+          '/memes/Praise/cheers.svg', 
+          '/memes/Praise/hehe-boi.svg', 
+          '/memes/Praise/think-about-it.svg', 
+          '/memes/Praise/tony.svg'
+      ];
       // Select appropriate meme
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       if (!activeMemes || activeMemes.length === 0) {
