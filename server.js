@@ -20,14 +20,12 @@ const PROFANITY = [
   'nigger', 'bastard', 'slut', 'whore', 'kys', 'retard'
 ];
 
+// Compile the regex ONCE when the server starts
+const PROFANITY_REGEX = new RegExp(`\\b(${PROFANITY.join('|')})\\b`, 'gi');
+
 function cleanText(str) {
   if (!str) return str;
-  let cleaned = str;
-  PROFANITY.forEach(word => {
-    const regex = new RegExp(`\\b${word}\\b`, 'gi');
-    cleaned = cleaned.replace(regex, '***');
-  });
-  return cleaned;
+  return str.replace(PROFANITY_REGEX, '***');
 }
 
 function getEditDistance(a, b) {
@@ -507,8 +505,7 @@ io.on('connection', (socket) => {
           room.lastSync = now;
         }
         
-        if (room.strokeHistory.length > 1000) room.strokeHistory = room.strokeHistory.slice(-500);
-      }
+        if (room.strokeHistory.length > 500) room.strokeHistory.shift();      }
     } catch (e) { console.error('drawing error:', e); }
   });
 
@@ -587,8 +584,8 @@ io.on('connection', (socket) => {
           return;
         }
         const threshold = word.length <= 5 ? 1 : 2;
-        if (word.length > 2 && getEditDistance(guess, word) <= threshold) {
-          socket.emit('receiveChat', { type: 'normal', name: p.name, text: safeText });
+        // EARLY EXIT: Only do the heavy math if the lengths are very close!
+        if (word.length > 2 && Math.abs(guess.length - word.length) <= threshold && getEditDistance(guess, word) <= threshold) {          socket.emit('receiveChat', { type: 'normal', name: p.name, text: safeText });
           socket.emit('receiveChat', { type: 'close', name: '', text: `🤏 '${rawText}' is very close!` });
           return;
         }
