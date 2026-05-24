@@ -648,9 +648,9 @@ document.addEventListener('DOMContentLoaded', () => {
           // Calculate positions
           const memeSize = 150; 
           // Align right with the signature area
-          const memeX = cardW - memeSize - 20; 
+          const memeX = cardW - memeSize - 5; 
           // Positioned above the signature line
-          const memeY = pTop + gameCanvas.height - 20; 
+          const memeY = pTop + gameCanvas.height - 5; 
           eCtx.drawImage(memeImg, memeX, memeY, memeSize, memeSize);
           
           finishExport(); 
