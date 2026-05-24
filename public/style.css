@@ -507,61 +507,33 @@ html, body {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; gap: 3px; min-width: 0;
   padding: 0 5px; /* Adds a tiny buffer so it doesn't touch the screen edges */
-}/* Container: Now allows wrapping for long words like 'Arranged Marriage' */
-.word-display { 
-    display: flex; 
-    gap: 6px; 
-    justify-content: center; 
-    align-items: center;
-    width: 100%;
-    flex-wrap: wrap; /* CRITICAL: Prevents long words from breaking your screen */
-    margin-top: 10px;
 }
-
+.word-display {
+  display: flex; gap: 3px; align-items: flex-end;
+  flex-wrap: nowrap; /* FORCE everything onto a single line */
+  justify-content: center;
+  width: 100%;
+}
 .wb-group { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
+  display: flex; flex-direction: column; align-items: center; gap: 3px; 
+  flex: 0 1 24px; /* Allows letters to shrink dynamically up to a max of 24px */
+  min-width: 0; 
 }
-
-/* Boxes: Smaller on mobile, bigger on desktop */
 .wb-char {
-    width: clamp(28px, 8vw, 34px); /* Scales down on tiny phones */
-    height: 42px;
-    border: 2px solid var(--blue-light);
-    border-radius: 8px;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    font-family: var(--f-display); 
-    font-size: clamp(0.9rem, 4vw, 1.2rem); /* Scalable font */
-    color: var(--txt);
-    background: rgba(255,255,255,0.6);
-    transition: all 0.3s var(--spring);
+  font-family: var(--f-display); 
+  font-size: clamp(0.85rem, 3.5vw, 1.35rem); /* Automatically scales font size down for long words */
+  color: var(--txt); 
+  width: 100%; 
+  text-align: center;
+  transition: all 0.3s var(--spring);
 }
-
-.wb-char.reveal { 
-    color: var(--indigo); 
-    border-color: var(--indigo); 
-    background: #fff;
-    transform: scale(1.05); /* Slightly softer pop */
+.wb-char.reveal { animation: charPop 0.4s var(--spring); color: var(--indigo); }
+@keyframes charPop { 0%{transform:scale(0) rotate(-15deg);opacity:0} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+.wb-line { 
+  height: 3px; background: var(--txt); border-radius: 2px; 
+  width: 100% !important; /* Seamlessly overrides the 20px hardcode from your JavaScript */
 }
-
-/* Hide the old line style */
-.wb-line { display: none !important; }
-
-/* The clear gap between words */
-.wb-space { 
-    width: 12px; 
-}
-
-/* Keep your metadata text styling so you don't lose the "10 letters" count */
-.word-meta { 
-    font-size: 0.75rem; 
-    color: var(--txt-light); 
-    font-weight: 700; 
-    margin-top: 4px; 
-}}
+.word-meta { font-size: 0.68rem; color: var(--txt-light); font-weight: 700; }
 
 /* Header right */
 .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -2145,4 +2117,3 @@ html[data-theme="dark"] .priv-setting-label { color: #94a3b8 !important; }
     display: flex; align-items: center; justify-content: center;
   }
 }
-
