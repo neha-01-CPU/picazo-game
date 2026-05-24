@@ -46,6 +46,7 @@ function getEditDistance(a, b) {
 }
 
 const WORD_BANK = [
+  // --- Original Words ---
   {w:'waffle'}, {w:'microscope'}, {w:'pancake'}, {w:'umbrella'}, {w:'magnet'},
   {w:'scarecrow'}, {w:'pigeon'}, {w:'octopus'}, {w:'backpack'}, {w:'spaceship'},
   {w:'bicycle'}, {w:'skateboard'}, {w:'camera'}, {w:'starfish'}, {w:'treasure'},
@@ -75,7 +76,42 @@ const WORD_BANK = [
   {w:'yo-yo'}, {w:'flamingo'}, {w:'anchor'}, {w:'trophy'}, {w:'hammock'},
   {w:'microchip'}, {w:'scooter'}, {w:'binoculars'}, {w:'toothbrush'}, {w:'campfire'},
   {w:'mirror'}, {w:'firetruck'}, {w:'windmill'}, {w:'mushroom'}, {w:'satellite'},
-  {w:'elevator'}
+  {w:'elevator'},
+  
+  // --- Indian Vibe Words ---
+  {w: 'Girlfriend'}, {w: 'Best Friend'}, {w: 'Arranged Marriage'}, 
+  {w: 'Dating App'}, {w: 'Toxic Relationship'}, {w: 'First Date'}, 
+  {w: 'Wedding Season'}, {w: 'Joint Family'}, {w: 'Love Letter'},
+  {w: 'Traffic Jam'}, {w: 'Autorickshaw'}, {w: 'Street Food'}, 
+  {w: 'Spicy Food'}, {w: 'Monday Morning'}, {w: 'Power Cut'}, 
+  {w: 'Public Transport'}, {w: 'Cricket Match'}, {w: 'Exam Stress'}, 
+  {w: 'Work From Home'}, {w: 'Summer Vacation'}, {w: 'Local Train'},
+  {w: 'Tea Time'}, {w: 'Heavy Rain'}, {w: 'Waiting Room'}, 
+  {w: 'House Party'}, {w: 'Tech Support'}, {w: 'Mobile Charger'},
+  {w: 'Late Night'}, {w: 'Shopping Spree'}, {w: 'Cricket Worldcup'}, 
+  {w: 'Food Delivery'}, {w: 'Lost Keys'}, {w: 'Early Morning'}, 
+  {w: 'Video Call'}, {w: 'Bad WiFi'}, {w: 'Full Battery'}, 
+  {w: 'Hidden Treasure'}, {w: 'School Bus'}, {w: 'Gym Workout'},
+  {w: 'Cinema Hall'}, {w: 'Flight Delay'}, {w: 'Online Shopping'},
+  {w: 'Office Desk'}, {w: 'Dream Job'}, {w: 'Empty Wallet'},
+  {w: 'Night Shift'}, {w: 'Sunday Brunch'}, {w: 'Speed Breaker'},
+  {w: 'Traffic Police'}, {w: 'Railway Station'}, {w: 'Highway Toll'}, 
+  {w: 'Reserved Seat'}, {w: 'Rush Hour'}, {w: 'Parking Lot'}, 
+  {w: 'Conference Call'}, {w: 'Office Canteen'}, {w: 'Final Exam'}, 
+  {w: 'Group Study'}, {w: 'Library Desk'}, {w: 'Internship Search'}, 
+  {w: 'Coffee Machine'}, {w: 'Job Interview'}, {w: 'Project Report'}, 
+  {w: 'Late Submission'}, {w: 'Campus Life'}, {w: 'Ceiling Fan'}, 
+  {w: 'Power Failure'}, {w: 'Water Tank'}, {w: 'Morning Newspaper'}, 
+  {w: 'Utility Bill'}, {w: 'Dining Table'}, {w: 'Balcony View'}, 
+  {w: 'Guest Room'}, {w: 'Shopping Mall'}, {w: 'Family Dinner'}, 
+  {w: 'Birthday Surprise'}, {w: 'Wedding Guest'}, {w: 'Movie Ticket'}, 
+  {w: 'Holiday Trip'}, {w: 'Health Checkup'}, {w: 'Fitness Center'}, 
+  {w: 'Rickshaw'}, {w: 'Monsoon'}, {w: 'Pothole'}, {w: 'Honking'}, 
+  {w: 'Canteen'}, {w: 'Syllabus'}, {w: 'Appraisal'}, {w: 'Deadline'}, 
+  {w: 'Veranda'}, {w: 'Newspaper'}, {w: 'Chai'}, {w: 'Samosa'}, 
+  {w: 'Festival'}, {w: 'Wedding'}, {w: 'Neighbour'}, {w: 'Gossip'},
+  {w: 'Cricket'}, {w: 'Salary'}, {w: 'Invitation'}, {w: 'Reunion'},
+  {w: 'Picnic'}
 ];
 
 const rooms = {};
