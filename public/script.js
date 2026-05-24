@@ -1438,7 +1438,11 @@ socket.on('yourTurn', (choices) => {
       choices.forEach(c => {
         const card = document.createElement('div'); 
         card.className = 'ws-card';
-        card.innerHTML = `<div class="ws-word">${c.w}</div><div class="ws-len">${c.w.length} letters</div>`;        
+        
+        // Calculate letter count without spaces
+        const actualCount = c.w.replace(/\s/g, '').length;
+        
+        card.innerHTML = `<div class="ws-word">${c.w}</div><div class="ws-len">${actualCount} letters</div>`;        
         card.addEventListener('pointerdown', (e) => {
           e.preventDefault();
           socket.emit('wordPicked', c.w);
@@ -1790,14 +1794,23 @@ function renderWordBlanks() {
     return; 
   }
   
-  wordMeta.textContent = S.isDrawer ? `You are drawing — ${S.currentWord.length} letters` : `${S.currentWord.length} letters`;
+  // 1. Calculate actual letters by ignoring spaces
+  const actualLetterCount = S.currentWord.replace(/\s/g, '').length;
+  wordMeta.textContent = S.isDrawer ? `You are drawing — ${actualLetterCount} letters` : `${actualLetterCount} letters`;
 
   for (let i = 0; i < S.currentWord.length; i++) {
     const ch = S.currentWord[i];
     const grp = document.createElement('div');
-    const charEl = document.createElement('div');
-    
     grp.className = 'wb-group'; 
+
+    // 2. If it's a space, render an empty gap without the underline
+    if (ch === ' ') {
+      grp.style.minWidth = '16px'; // Creates a visual space between words
+      wordDisplay.appendChild(grp);
+      continue; // Skip the rest of the loop so no line is drawn
+    }
+    
+    const charEl = document.createElement('div');
     const revealed = S.revealedIdx.includes(i);
     charEl.className = 'wb-char' + (revealed && !S.isDrawer ? ' reveal' : '');
     charEl.textContent = S.isDrawer || revealed ? ch.toUpperCase() : '';
