@@ -635,8 +635,8 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.restore(); 
 
     // 🔥 11. THE MEME AVATAR LOGIC (Bottom-Right, positioned above signature)
-      const roastMemes = ['/memes/disappointed.svg', '/memes/facepalm.svg']; 
-      const praiseMemes = ['/memes/smart.svg', '/memes/mind-blown.svg'];
+     const roastMemes = ['/memes/troll-face.svg']; 
+      const praiseMemes = ['/memes/troll-face.svg'];
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       const selectedMeme = activeMemes[Math.floor(Math.random() * activeMemes.length)];
 
