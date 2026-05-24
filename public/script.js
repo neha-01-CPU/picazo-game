@@ -320,9 +320,10 @@ let S = {
   shapeStartX: 0,
   shapeStartY: 0,
   previewData: null,
-  // Tracks the last received remote drawing point so we can do moveTo→lineTo correctly
+ // Tracks the last received remote drawing point so we can do moveTo→lineTo correctly
   remoteLastX: null,
-  remoteLastY: null
+  remoteLastY: null,
+  lastEmitTime: 0 // Track when we last sent a dot to the server
 };
 
 const CIRC = 2 * Math.PI * 25; 
@@ -2159,6 +2160,7 @@ function onDrawMove(e) {
       return;
   }
 
+  // 1. LOCAL DRAWING: Happens instantly, zero lag for the artist!
   ctx.lineTo(pos.x, pos.y); 
   ctx.stroke(); 
   ctx.beginPath(); 
@@ -2168,13 +2170,19 @@ function onDrawMove(e) {
   const drawSize = S.tool === 'eraser' ? S.brushSize * 3 : S.brushSize;
   
   const r = gameCanvas.getBoundingClientRect();
-  socket.emit('drawing', { 
-    x: pos.x / r.width, 
-    y: pos.y / r.height, 
-    color: drawColor, 
-    size: drawSize / r.width, 
-    type: 'move' // 🛠️ FIXED: This must be 'move', not 'start'
-  });
+  
+  // 2. NETWORK THROTTLE: Cap at ~66 updates per second to protect the server
+  const now = Date.now();
+  if (now - S.lastEmitTime > 15) { 
+    socket.emit('drawing', { 
+      x: pos.x / r.width, 
+      y: pos.y / r.height, 
+      color: drawColor, 
+      size: drawSize / r.width, 
+      type: 'move' 
+    });
+    S.lastEmitTime = now;
+  }
 }
 
 function onDrawEnd(e) { 
