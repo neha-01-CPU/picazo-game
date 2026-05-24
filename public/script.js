@@ -634,9 +634,9 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fillText(`${signaturePrefix} 🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 85);
       eCtx.restore(); 
 
-    // 🔥 11. THE MEME AVATAR LOGIC (Bottom-Right, Larger Size)
-      const roastMemes = ['/memes/troll-face.svg']; 
-      const praiseMemes = ['/memes/troll-face.svg'];
+    // 🔥 11. THE MEME AVATAR LOGIC (Bottom-Right, positioned above signature)
+      const roastMemes = ['/memes/disappointed.svg', '/memes/facepalm.svg']; 
+      const praiseMemes = ['/memes/smart.svg', '/memes/mind-blown.svg'];
       const activeMemes = isRoast ? roastMemes : praiseMemes;
       const selectedMeme = activeMemes[Math.floor(Math.random() * activeMemes.length)];
 
@@ -645,10 +645,12 @@ document.addEventListener('DOMContentLoaded', () => {
       memeImg.src = selectedMeme;
 
       memeImg.onload = () => {
-          // Increased size to 160 and placed in bottom-right corner
-          const memeSize = 160; 
+          // Calculate positions
+          const memeSize = 140; 
+          // Align right with the signature area
           const memeX = cardW - memeSize - 20; 
-          const memeY = pTop + gameCanvas.height - 20; 
+          // Positioned above the signature line
+          const memeY = pTop + gameCanvas.height - 30; 
           eCtx.drawImage(memeImg, memeX, memeY, memeSize, memeSize);
           
           finishExport(); 
@@ -659,20 +661,27 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       function finishExport() {
-          // Draw Artist Signature above the meme or clearly visible
-          let drawerName = (S.drawerIdx >= 0 && S.players[S.drawerIdx]) ? S.players[S.drawerIdx].name : "Artist";
-          if (S.isDrawer) drawerName = S.playerName;
-          
-          eCtx.textAlign = 'right';
-          eCtx.font = 'normal 32px Boogaloo, cursive';
-          eCtx.fillStyle = '#64748b'; 
-          const sigPrefix = isRoast ? "Apology by" : "Masterpiece by";
-          // Placed above the meme avatar area
-          eCtx.fillText(`${sigPrefix} 🖌 ${drawerName}`, cardW - 20, pTop + gameCanvas.height + 60);
-
           eCtx.restore(); // Restore main rotation
 
-          // Footer
+          // 10. Artist Signature (Bottom Right - Clean and centered)
+          let drawerName = "An Artist";
+          if (S.drawerIdx >= 0 && S.players[S.drawerIdx]) {
+              drawerName = S.players[S.drawerIdx].name;
+          }
+          if (S.isDrawer) drawerName = S.playerName; 
+          
+          eCtx.textAlign = 'right';
+          eCtx.font = 'normal 48px Boogaloo, cursive';
+          
+          const sigGrad = eCtx.createLinearGradient(cardW - 400, 0, cardW - 30, 0);
+          sigGrad.addColorStop(0, '#8b5cf6'); 
+          sigGrad.addColorStop(1, '#ec4899'); 
+          eCtx.fillStyle = sigGrad; 
+          
+          // Original Artist Signature (Positioned at the very bottom right)
+          eCtx.fillText(`🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 110);
+
+          // 11. Viral Footer Call-To-Action
           eCtx.textAlign = 'center';
           eCtx.shadowColor = 'rgba(0,0,0,0.5)';
           eCtx.shadowBlur = 10;
@@ -681,6 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
           eCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
           eCtx.fillText(isRoast ? 'Think you can do better?' : 'Want to play too?', exportCanvas.width / 2, exportCanvas.height - 90);
           eCtx.font = '900 42px Nunito, sans-serif';
+          eCtx.fillStyle = '#ffffff'; 
           eCtx.fillText('Prove it at PICAZO.COM 🚀', exportCanvas.width / 2, exportCanvas.height - 40);
 
           // Download Trigger
