@@ -634,30 +634,65 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.fillText(`${signaturePrefix} 🖌 ${drawerName}`, cardW - pSide - 10, pTop + gameCanvas.height + 85);
       eCtx.restore(); 
 
-      // Footer
-      eCtx.textAlign = 'center';
-      eCtx.shadowColor = 'rgba(0,0,0,0.5)';
-      eCtx.shadowBlur = 10;
-      eCtx.shadowOffsetY = 4;
-      eCtx.font = '800 32px Nunito, sans-serif';
-      eCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
-      eCtx.fillText(isRoast ? 'Think you can do better?' : 'Want to play too?', exportCanvas.width / 2, exportCanvas.height - 90);
-      eCtx.font = '900 42px Nunito, sans-serif';
-      eCtx.fillStyle = '#ffffff'; 
-      eCtx.fillText('Prove it at PICAZO.COM 🚀', exportCanvas.width / 2, exportCanvas.height - 40);
+      // 🔥 11. THE MEME AVATAR LOGIC (Async Load)
+      
+      // Update these arrays with the exact filenames of the memes you saved!
+      const roastMemes = ['/memes/disappointed.png', '/memes/facepalm.png']; 
+      const praiseMemes = ['/memes/smart.png', '/memes/mind-blown.png'];
+      
+      const activeMemes = isRoast ? roastMemes : praiseMemes;
+      const selectedMeme = activeMemes[Math.floor(Math.random() * activeMemes.length)];
 
-      // Download
-      const link = document.createElement('a');
-      link.download = `Picazo_${safeWord}.png`;
-      link.href = exportCanvas.toDataURL('image/png', 1.0); 
-      link.click();
-      
-      showToast('📸 Image saved!', 't-info');
-      
-      const originalHTML = btnElement.innerHTML;
-      btnElement.innerHTML = '<span class="btn-icon">✅</span> Saved!';
-      setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
-  }
+      const memeImg = new Image();
+      memeImg.crossOrigin = "anonymous"; // Prevents canvas security errors
+      memeImg.src = selectedMeme;
+
+      // Because images take a split second to load, we wrap the final export inside this onload function
+      memeImg.onload = () => {
+          // Draw the meme in the bottom left corner, overlapping the frame slightly
+          const memeSize = 110; 
+          const memeX = pSide - 10; 
+          const memeY = pTop + gameCanvas.height - 20; 
+          eCtx.drawImage(memeImg, memeX, memeY, memeSize, memeSize);
+          
+          finishExport(); // Call the final steps
+      };
+
+      memeImg.onerror = () => {
+          // If the meme file is missing or misspelled, export normally without crashing
+          console.warn("Meme image failed to load:", selectedMeme);
+          finishExport(); 
+      };
+
+      // 12. Final Export Steps
+      function finishExport() {
+          eCtx.restore(); // Restore main rotation
+
+          // Viral Footer
+          eCtx.textAlign = 'center';
+          eCtx.shadowColor = 'rgba(0,0,0,0.5)';
+          eCtx.shadowBlur = 10;
+          eCtx.shadowOffsetY = 4;
+          eCtx.font = '800 32px Nunito, sans-serif';
+          eCtx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+          eCtx.fillText(isRoast ? 'Think you can do better?' : 'Want to play too?', exportCanvas.width / 2, exportCanvas.height - 90);
+          eCtx.font = '900 42px Nunito, sans-serif';
+          eCtx.fillStyle = '#ffffff'; 
+          eCtx.fillText('Prove it at PICAZO.COM 🚀', exportCanvas.width / 2, exportCanvas.height - 40);
+
+          // Trigger Download
+          const link = document.createElement('a');
+          link.download = `Picazo_${safeWord}.png`;
+          link.href = exportCanvas.toDataURL('image/png', 1.0); 
+          link.click();
+          
+          showToast('📸 Image saved!', 't-info');
+          
+          const originalHTML = btnElement.innerHTML;
+          btnElement.innerHTML = '<span class="btn-icon">✅</span> Saved!';
+          setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
+      }
+  } // <-- End of generatePolaroid function
 
  // Attach the dual listeners
   if (btnRoast) btnRoast.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(true, btnRoast); });
