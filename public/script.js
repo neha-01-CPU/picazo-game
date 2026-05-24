@@ -574,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
       eCtx.drawImage(gameCanvas, pSide, pTop);
 
       // 🔥 DYNAMIC STAMP LOGIC
-      const roastStamps = ["PICASSO IS WEEPING", "WHAT EVEN IS THIS?", "ABSOLUTE TRASH", "NAILED IT.", "A+ FOR EFFORT"];
+      const roastStamps = ["PICASSO IS WEEPING", "WHAT EVEN IS THIS?", "AN ATTEMPT WAS MADE", "NAILED IT.", "404: ART NOT FOUND"];
       const praiseStamps = ["BELONGS IN A MUSEUM", "10 / 10", "ABSOLUTE MASTERPIECE", "GORGEOUS", "FLAWLESS"];
       
       const stamps = isRoast ? roastStamps : praiseStamps;
@@ -659,9 +659,10 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { btnElement.innerHTML = originalHTML; }, 2000);
   }
 
-  // Attach the dual listeners
+ // Attach the dual listeners
   if (btnRoast) btnRoast.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(true, btnRoast); });
   if (btnPraise) btnPraise.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(false, btnPraise); });
+}); // 🔥 FIXED: This bracket was missing! It closes the DOM load event.
 
 /* ════════════════════════════════════════════
    CONNECTION & LOBBY LOGIC
@@ -1824,7 +1825,8 @@ function renderWordBlanks() {
     wordDisplay.appendChild(grp);
   }
 }
-// Figure out who drew this round
+function showRoundEndUI(word, allGuessed) {
+  // Figure out who drew this round
   let drawerName = "The Artist";
   if (S.drawerIdx >= 0 && S.players[S.drawerIdx]) {
       drawerName = S.players[S.drawerIdx].name;
@@ -1835,7 +1837,7 @@ function renderWordBlanks() {
   if ($('btn-roast-round')) {
       $('btn-roast-round').innerHTML = `<span class="btn-icon">🔥</span> Roast ${escHtml(drawerName)}`;
   }
-function showRoundEndUI(word, allGuessed) {
+
   addChat('system', '', `⏰ Turn over! Word was: "${word}"`);
   
   // Update the global state with the revealed word so the Masterpiece export uses it!
