@@ -691,6 +691,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           showToast('📸 Image saved!', 't-info');
       }
+  } //
 
  // Attach the dual listeners
   if (btnRoast) btnRoast.addEventListener('click', (e) => { e.stopPropagation(); generatePolaroid(true, btnRoast); });
